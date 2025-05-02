@@ -1,0 +1,68 @@
+# Enable URL rewriting
+RewriteEngine On
+
+# Set base directory
+RewriteBase /workpulse/
+
+# Allow access to necessary assets and files
+RewriteCond %{REQUEST_URI} !^/workpulse/assets/
+RewriteCond %{REQUEST_URI} !^/workpulse/login\.php$
+RewriteCond %{REQUEST_URI} !^/workpulse/404\.php$
+RewriteCond %{REQUEST_URI} !^/workpulse/css/
+RewriteCond %{REQUEST_URI} !^/workpulse/js/
+RewriteCond %{REQUEST_URI} !^/workpulse/admin/
+RewriteCond %{REQUEST_URI} !^/workpulse/api/
+RewriteCond %{REQUEST_URI} !^/workpulse/logout\.php$
+RewriteCond %{REQUEST_URI} !^/workpulse/db\.php$
+RewriteCond %{REQUEST_URI} !^/workpulse/config\.php$
+
+# Block direct access to PHP files in root directory except allowed ones
+RewriteCond %{REQUEST_URI} \.php$
+RewriteCond %{REQUEST_URI} !^/workpulse/login\.php$
+RewriteCond %{REQUEST_URI} !^/workpulse/logout\.php$
+RewriteCond %{REQUEST_URI} !^/workpulse/admin/
+RewriteCond %{REQUEST_URI} !^/workpulse/api/
+RewriteCond %{REQUEST_URI} !^/workpulse/db\.php$
+RewriteCond %{REQUEST_URI} !^/workpulse/config\.php$
+RewriteRule ^ - [F,L]
+
+# If the request is for the root directory, redirect to login.php
+RewriteCond %{REQUEST_URI} ^/workpulse/?$
+RewriteRule ^ login.php [L]
+
+# Custom 404 error page
+ErrorDocument 404 /workpulse/404.php
+ErrorDocument 403 /workpulse/404.php
+
+# Prevent directory listing
+Options -Indexes
+
+# Set default character set
+AddDefaultCharset UTF-8
+
+# Protect sensitive files
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "^(\.env|\.env\.example|composer\.json|composer\.lock|package\.json|package-lock\.json)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Enable compression for better performance
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript application/json
+</IfModule>
+
+# Set security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
+
+
+

@@ -1,0 +1,17 @@
+{
+    "name": "admin/zkteco_app",
+    "autoload": {
+        "psr-4": {
+            "Admin\\ZktecoApp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "norshy"
+        }
+    ],
+    "require": {
+        "jmrashed/zkteco": "^1.0",
+        "phpmailer/phpmailer": "^6.10"
+    }
+}
